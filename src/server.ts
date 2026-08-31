@@ -11,11 +11,12 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/users', (request: Request, response: Response) => {
     const user = new User('Ruan', 'ruan.jvn03@gmail.com', '123')
 
-    console.log(user.verificarSenha('1234'))
+    console.log(user.verificarSenha('123'))
+    console.log(user.getDadosPublicos())
 
 
     response.json({
-        message: `Dados usuario ${user.nome}`,
+        message: `Dados usuario ${user.getDadosPublicos()}`,
         timestamp: new Date().toISOString(),
         user: user,
         status: 'API FUNCIONANDO'
