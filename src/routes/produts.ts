@@ -4,24 +4,24 @@ import { PrismaClient, User } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const rotaUsuarios = Router()
+const rotaProdutos = Router()
 
-rotaUsuarios.get('/users', async (request: Request, response: Response) => {
-  const result = await prisma.user.findMany()
+rotaProdutos.get('/produtos', async (request: Request, response: Response) => {
+  const result = await prisma.produtos.findMany()
 
   return response.status(200).json({
-    message: `Lista de usuários`,
+    message: `Lista de produtos`,
     data: result,
   })
 })
 
 
-rotaUsuarios.get('/users/:id', async (request: Request, response: Response) => {
+rotaProdutos.get('/produtos/:id', async (request: Request, response: Response) => {
 
   const { id, } = request.params
 
   //todo-winnicius: transferir para o service de consulta do banco de dados
-  const result = await prisma.user.findUnique({
+  const result = await prisma.produtos.findUnique({
     where: {
       id: Number(id),
     }
@@ -44,9 +44,9 @@ rotaUsuarios.get('/users/:id', async (request: Request, response: Response) => {
   })
 })
 
-rotaUsuarios.post('/users', async (request: Request<User>, response: Response) => {
-  const { nome, email, senha } = request.body as User
-  const user = await prisma.user.create({
+rotaProdutos.post('/produtos', async (request: Request<User>, response: Response) => {
+  const { nome, email, senha } = request.body
+  const user = await prisma.produtos.create({
     data: {
       nome,
       email,
@@ -62,7 +62,7 @@ rotaUsuarios.post('/users', async (request: Request<User>, response: Response) =
 })
 
 
-rotaUsuarios.put('/users/:id', async (request: Request<User>, response: Response) => {
+rotaProdutos.put('/produtos/:id', async (request: Request<User>, response: Response) => {
   const { id } = request.params
   const { nome, email, senha } = request.body as User
   const user = await prisma.user.update({
@@ -83,7 +83,7 @@ rotaUsuarios.put('/users/:id', async (request: Request<User>, response: Response
   })
 })
 
-rotaUsuarios.delete('/users/:id', async (request: Request, response: Response) => {
+rotaProdutos.delete('/produtos/:id', async (request: Request, response: Response) => {
   const { id } = request.params
   await prisma.user.delete({
     where: {
@@ -97,4 +97,4 @@ rotaUsuarios.delete('/users/:id', async (request: Request, response: Response) =
   })
 })
 
-export default rotaUsuarios
+export default rotaProdutos

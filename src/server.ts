@@ -1,30 +1,28 @@
-import express, { Request, Response } from 'express';
-import { User } from './models/user.js';
-
-const app = express();
-
-
-app.get('/', (req: Request, res: Response) => {
-    res.send('Servidor ativo! Acesse /Users para ver os usuários.');
-});
-
-app.get('/users', (request: Request, response: Response) => {
-    const user = new User('Ruan', 'ruan.jvn03@gmail.com', '123')
-
-    console.log(user.verificarSenha('123'))
-    console.log(user.getDadosPublicos())
+import dotenv from 'dotenv'
+import express, { type Request, type Response } from 'express'
+import rotaUsuarios from './routes/users.js'
+import rotaProdutos from './routes/produts.js'
+dotenv.config()
+const app = express()
+const port = process.env.PORT
 
 
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+app.get('/', (request: Request, response: Response) => {
     response.json({
-        message: `Dados usuario ${user.getDadosPublicos()}`,
-        timestamp: new Date().toISOString(),
-        user: user,
-        status: 'API FUNCIONANDO'
+        message: 'API FUNCIONANDO!',
+        timestamp: new Date().toISOString()
     })
-});
+})
 
-app.listen(3000, () => {
-    console.log('SUCESSO: Servidor rodando na porta 3000!');
-    console.log('Acesse: http://localhost:3000/Users');
+app.use('/v1', [
+    rotaUsuarios,
+    rotaProdutos
+])
 
-});
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`)
+    console.log(`Healt http://localhost:${port}/healt`)
+})
